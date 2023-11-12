@@ -8,4 +8,4 @@ We introduce the **Question-guided Multi-hop Fact-Checking (QACheck)** system, w
 
 ![The general framework of QACheck](./framework.png)
 
-<img src="./framework.png" align="left" alt="drawing" width="2000px"/>
+<!-- <img src="./framework.png" align="left" alt="drawing" width="2000px"/> -->
