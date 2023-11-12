@@ -22,7 +22,19 @@ We introduce the **Question-guided Multi-hop Fact-Checking (QACheck)** system, w
 
 ## Demo System
 
-Coming Soon...
+Clone the github to your local machine and install the required packages.
+```bash
+pip install flask
+pip install openai
+pip install backoff
+```
+
+Run the demo system.
+```bash
+python run-demo.py \
+    --model_name <gpt-4 or gpt-3.5-turbo> \
+    --API_KEY <Your OpenAI API key> \
+```
 
 ## Reference
 Please cite the paper in the following format if you use this dataset during your research.

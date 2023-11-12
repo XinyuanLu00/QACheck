@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Evidence Annotation</title>
+    <link href="../static/styles/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/styles/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/styles/pretty-checkbox.min.css"/>
+    <link rel="stylesheet" href="../static/styles/index.css"/>
+  </head>
+  <body>
+
+    <div id="navbar" class="container">
+      <div id="title">
+        <h2 class="display-3" style="margin-top:20px; margin-bottom:0px;">
+          QACheck: Question-Guided Multi-hop Fact-Checking Demo
+        </h2>
+        <p>
+          <br />
+          designed by <a href="https://www.liangmingpan.com" target="_blank">Liangming Pan</a>
+          (<a href="liangmingpan@ucsb.edu" target="_blank"><i class="fa fa-envelope" aria-hidden="true"></i></a>,
+          <a href="https://twitter.com/PanLiangming" target="_blank"><i class="fa fa-twitter-square"></i></a>)
+          <br />
+        </p>
+      </div>
+      <p>
+        <b>Instructions:</b> Select a claim or just enter your own claim otherwise, and then check the model's output.
+        <br />
+      </p>
+    </div>
+    <div class="container" id="container" role="main">
+      <form class="form-signin" method="POST" action="{{ url_for('submit') }}">
+
+          {% if flags == 0 %}
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <input type="radio" name="group-choice" id="select_question" value="select_question">
+              &nbsp; Please select a claim.
+            </div>
+            <div class="panel-body" id="question-panel">
+              <select class="selections" id="question-choices" name="question-choices" style="width: 1100px;height: 30px;" value="0">
+                {% for claim in claims %}
+                <option value="{{loop.index0}}">{{claim}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <input type="radio" name="group-choice" id="custom_question" value="custom_question">
+              &nbsp; Custom Claim
+            </div>
+
+            <div class="panel-body"><input style="width: 1100px;height: 30px;" type="text" name="self-input">
+            </div>
+          </div>
+          <div style="display:none"><br/>
+            <input type="hidden" id="final-choice" name="final-choice" value="">
+          </div>
+          {% endif %}
+
+          <br/>
+          
+          {% if not flags == 0 %}
+          <div class="panel panel-success">
+            <div class="panel-heading">Input Claim: </div>
+            <div class="panel-body">{{selected_claim}}</div>
+          </div>
+
+          <div class="panel panel-info">
+            <div class="panel-heading">Question Answering Decomposition: </div>
+            {% for result in contexts_history %}
+              <div class="panel-body">
+                <table align="left" width="60%">
+                  <tr>
+                      <td width="5%"><img src="{{ url_for('static', filename='icon/reasoning_depth.png') }}" width="18px" height="18px"></td>
+                      <td>Reasoning depth: {{result['round']}}</td>
+                  </tr>
+                  <tr>
+                      <td width="5%"><img src="{{ url_for('static', filename='icon/question.png') }}" width="20px" height="20px"></td>
+                      <td>Generated Question: <span style="color:red;">{{result['generated_question']}}</span></td>
+                  </tr>
+                  <tr>
+                      <td width="5%"><img src="{{ url_for('static', filename='icon/answer.png') }}" width="20px" height="20px"></td>
+                      <td>Predicted Answer: {{result['answer']}}</td>
+                  </tr>
+                </table>
+                <table align="right" width="40%">
+                  <tr>
+                    <div>
+                      <img src="{{ url_for('static', filename='icon/search.png') }}" width="120px">
+                    </div>
+                  </tr>
+                  <tr>
+                    <div>
+                      <textarea style="background-color: white; width: 400px; height: 100px;" readonly>{{result['rationale']}}</textarea>
+                    </div>  
+                  </tr>
+                </table>
+              </div>
+            {% endfor %}
+          </div>
+
+          <div class="panel panel-warning">
+            <div class="panel-heading">Prediction with rationale: </div>
+            <div class="panel-body">{{prediction_with_rationale}}</div>
+          </div>
+          {% endif %}
+
+          {% if flags == 0 %}
+            <button id='submit' class="btn btn-success btn-lg btn-block" type="submit" onclick="select_question()">Submit</button>
+          {% else %}
+            <button id='submit' class="btn btn-info btn-lg btn-block" type="submit" onclick="select_question()">Finish</button>
+          {% endif %}
+
+        </div>
+      </form>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../static/jquery-3.1.0.min.js"></script>
+    <script src="../static/jszip.min.js"></script>
+    <script src="../static/index.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-141683611-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'UA-141683611-1');
+    </script>
+  </body>
+</html>
+
+
